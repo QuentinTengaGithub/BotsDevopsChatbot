@@ -28,8 +28,6 @@ function ChatItem(props) {
         return "Ghost"
       case "bot2":
         return "Transformer"
-      case "bot3":
-        return "Holly"
       default:
         return "Quentin"
     }

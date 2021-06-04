@@ -11,10 +11,11 @@ import "./chatContent.scss";
 import ChatItem from "./ChatItem";
 
 // Services
-import { getCovidData } from "../../Services/Bot/botAPI";
+import { getCovidData, getNews } from "../../Services/Bot/botAPI";
 
 // Constants
 import { bots } from "../../constants";
+import { calculateCPUBenchmark } from "../../utils";
 
 function ChatContent(props) {
   let messagesEndRef = useRef(null);
@@ -33,13 +34,24 @@ function ChatContent(props) {
   const shouldBotRespond = (msg) => {
     if (msg.match(/hello/gi) || msg.match(/hey/gi) || msg.match(/hi/gi)) {
       greet("bot1");
+      greet("bot2");
       return;
     }
 
     if (msg.match(/covid/gi)) {
       getCovidCaseCounts();
       return;
-    } 
+    }
+
+    if (msg.match(/cpu/gi)) {
+      speedOfCPU();
+      return;
+    }
+
+    if (msg.match(/news/gi)) {
+      returnNews();
+      return;
+    }
 
     if (msg.match(/search/gi)) {
       askKeywordToSearch();
@@ -63,6 +75,14 @@ function ChatContent(props) {
   const greet = (bot) => {
     props.addMessageToChatFrom(`Hey there! I am ${bots[bot].name}.`, bot);
     props.addMessageToChatFrom(bots[bot].powers, bot);
+  };
+
+  /**
+   * Calculates avg. CPU speed in ghz
+   */
+  const speedOfCPU = async () => {
+    const speedBenchmark = calculateCPUBenchmark();
+    props.addMessageToChatFrom(speedBenchmark, "bot2");
   };
 
   /**
@@ -95,6 +115,23 @@ function ChatContent(props) {
     const URL = `https://www.google.com/search?q=${query}`;
     props.addMessageToChatFrom(`Sure, here it is!`, "bot2");
     window.open(URL);
+  };
+
+  /**
+   * Gets latest news for France
+   */
+  const returnNews = async () => {
+    try {
+      const country = { name: "France", code: "fr" };
+      const numberOfHeadlines = 5;
+      const newsHeadlines = await getNews(country.code, numberOfHeadlines);
+      props.addMessageToChatFrom(
+        `Here are the top 5 headlines for ${country.name}: \n ${newsHeadlines}`,
+        "bot1"
+      );
+    } catch (err) {
+      console.log("Error in getting news.", err);
+    }
   };
 
   /**

@@ -6,7 +6,7 @@ function App() {
   return (
     <div className="App">
       <div className="app-data-container">
-        <h1>You can activate the bot by writing Hi/hey/hello!</h1>
+        <h1>You can activate the bots by writing Hi/hey/hello!</h1>
         <ChatContent />
       </div>
     </div>
