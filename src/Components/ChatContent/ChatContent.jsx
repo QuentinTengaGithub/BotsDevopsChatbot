@@ -11,7 +11,7 @@ import "./chatContent.scss";
 import ChatItem from "./ChatItem";
 
 // Services
-import { getCovidData, getNews } from "../../Services/Bot/botAPI";
+import { getCovidData, getNews, getHolidays } from "../../Services/Bot/botAPI";
 
 // Constants
 import { bots } from "../../constants";
@@ -35,11 +35,18 @@ function ChatContent(props) {
     if (msg.match(/hello/gi) || msg.match(/hey/gi) || msg.match(/hi/gi)) {
       greet("bot1");
       greet("bot2");
+      greet("bot3");
       return;
     }
 
     if (msg.match(/covid/gi)) {
       getCovidCaseCounts();
+      return;
+    }
+
+    if (msg.match(/holidays/gi)) {
+      getHolidaysInfos();
+      console.log("ouais c'est holidays");
       return;
     }
 
@@ -93,6 +100,14 @@ function ChatContent(props) {
     props.addMessageToChatFrom(
       `The world covid report is as follows: ${response}`,
       "bot1"
+    );
+  };
+
+  const getHolidaysInfos = async () => {
+    let response = await getHolidays();
+    props.addMessageToChatFrom(
+      `The infos for the holidays is as follows: ${response}`,
+      "bot3"
     );
   };
 

@@ -4,6 +4,7 @@ import "./styles.scss";
 import Me from "../../Assets/Images/profil.png";
 import Ghost from "../../Assets/Images/ghost.png";
 import Robo from "../../Assets/Images/robo.png";
+import Holly from "../../Assets/Images/sun.png";
 
 const Avatar = (props) => {
   const getImage = (name) => {
@@ -16,6 +17,8 @@ const Avatar = (props) => {
         return <img src={Robo} alt="avatar" />;
       default:
         return <img src={Me} alt="avatar" />;
+      case "bot3":
+        return <img src={Holly} alt="avatar" />;
     }
   };
   const { src } = props;
